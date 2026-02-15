@@ -1,5 +1,6 @@
 import os
 from datetime import datetime
+import pytz
 from feedgen.feed import FeedGenerator
 from mutagen.mp3 import MP3
 
@@ -60,8 +61,10 @@ class RSSGenerator:
         # Enclosure (audio file)
         fe.enclosure(episode_url, str(file_size), 'audio/mpeg')
 
-        # Publication date
+        # Publication date (timezone-aware for proper RSS format)
+        warsaw_tz = pytz.timezone('Europe/Warsaw')
         pub_date = datetime.strptime(episode_date, "%Y-%m-%d").replace(hour=21, minute=30)
+        pub_date = warsaw_tz.localize(pub_date)
         fe.pubDate(pub_date)
 
         # iTunes-specific tags

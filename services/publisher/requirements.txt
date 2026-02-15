@@ -2,3 +2,4 @@ elevenlabs==1.2.2
 feedgen==1.0.0
 mutagen==1.47.0
 requests==2.31.0
+pytz==2024.1
