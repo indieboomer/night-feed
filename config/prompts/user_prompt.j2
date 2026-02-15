@@ -1,0 +1,50 @@
+Przeanalizuj dzisiejsze sygnały z dnia {{ date }} i wygeneruj pełny skrypt podcastu Night-Feed.
+
+=== STEAM TOP SELLERS ===
+{% if steam_top_sellers %}
+{% for game in steam_top_sellers[:15] %}
+{{ loop.index }}. {{ game.name }} (App ID: {{ game.appid }})
+   Pozycja: #{{ game.rank }}{% if game.rank_change %} (zmiana: {{ game.rank_change }}){% endif %}
+{% endfor %}
+{% else %}
+Brak danych Steam Top Sellers.
+{% endif %}
+
+=== STEAM NOWE I POPULARNE ===
+{% if steam_trending %}
+{% for game in steam_trending[:15] %}
+- {{ game.name }} (App ID: {{ game.appid }})
+{% endfor %}
+{% else %}
+Brak danych Steam Trending.
+{% endif %}
+
+=== NAJWAŻNIEJSZE WIADOMOŚCI Z RSS ===
+{% if rss_highlights %}
+{% for item in rss_highlights[:20] %}
+[{{ item.source }}] {{ item.title }}
+   URL: {{ item.url }}
+   {% if item.published %}Data: {{ item.published }}{% endif %}
+{% endfor %}
+{% else %}
+Brak wiadomości RSS.
+{% endif %}
+
+=== WYKRYTE TRENDY ===
+{{ trend_summary if trend_summary else "Brak szczególnych trendów." }}
+
+=== INSTRUKCJA ===
+
+Wygeneruj PEŁNY skrypt podcastu w języku polskim (10-15 minut czytania, około 1500-2000 słów).
+
+Skrypt powinien być gotowy do bezpośredniego odczytania przez lektora TTS, bez żadnych dodatkowych adnotacji czy instrukcji.
+
+WAŻNE:
+- Nie dołączaj nagłówków sekcji w stylu "INTRO:", "SYGNAŁY RYNKOWE:" - po prostu płynnie przechodź między częściami
+- Skup się na interpretacji danych, nie na ich prostym wyliczaniu
+- Wybierz 2-3 najciekawsze sygnały do głębszej analizy
+- Dla "Głębszego rzutu oka" wybierz temat, który ma największy potencjał interpretacyjny
+- Użyj spokojnego, analitycznego tonu
+- Skrypt ma być naturalny i przyjemny w słuchaniu
+
+Zacznij od: "Dobry wieczór, tu Night-Feed..."

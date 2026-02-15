@@ -1,0 +1,71 @@
+sources:
+  # Tech News (English)
+  - name: hacker_news
+    url: https://news.ycombinator.com/rss
+    language: en
+    category: tech
+    priority: high
+
+  # Gaming News (English)
+  - name: gamedev_net
+    url: https://www.gamedev.net/rss/
+    language: en
+    category: gaming
+    priority: medium
+
+  - name: rock_paper_shotgun
+    url: https://www.rockpapershotgun.com/feed
+    language: en
+    category: gaming
+    priority: high
+
+  - name: pc_gamer
+    url: https://www.pcgamer.com/rss/
+    language: en
+    category: gaming
+    priority: medium
+
+  # Polish Tech News
+  - name: spiders_web
+    url: https://www.spidersweb.pl/feed
+    language: pl
+    category: tech
+    priority: high
+
+  - name: niebezpiecznik
+    url: https://niebezpiecznik.pl/feed/
+    language: pl
+    category: security
+    priority: medium
+
+  - name: benchmark_pl
+    url: https://www.benchmark.pl/rss/aktualnosci.xml
+    language: pl
+    category: tech
+    priority: medium
+
+  # Polish Gaming News
+  - name: eurogamer_pl
+    url: https://www.eurogamer.pl/feed
+    language: pl
+    category: gaming
+    priority: high
+
+  - name: gry_online
+    url: https://www.gry-online.pl/rss/wiadomosci.xml
+    language: pl
+    category: gaming
+    priority: high
+
+  # AI/ML News (English)
+  - name: huggingface_blog
+    url: https://huggingface.co/blog/feed.xml
+    language: en
+    category: ai
+    priority: high
+
+  - name: arxiv_cs_ai
+    url: http://export.arxiv.org/rss/cs.AI
+    language: en
+    category: ai
+    priority: low
