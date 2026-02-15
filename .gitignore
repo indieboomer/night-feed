@@ -1,2 +1,9 @@
 .env
 data/
+output/episodes/
+output/scripts/
+*.db
+*.log
+__pycache__/
+*.pyc
+.DS_Store

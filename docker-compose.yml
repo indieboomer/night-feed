@@ -1,13 +1,63 @@
 version: "3.8"
+
 services:
-  steam-monitor:
-    image: python:3.11-slim
-    container_name: night-feed
-    working_dir: /app
+  orchestrator:
+    build: ./services/orchestrator
+    container_name: night-feed-orchestrator
+    environment:
+      - TZ=Europe/Warsaw
     volumes:
-      - ./app:/app
       - ./data:/data
-    env_file:
-      - .env
-    command: sh -c "pip install -r /app/requirements.txt && python -u /app/main.py"
-    restart: always
+      - ./output:/output
+      - ./config:/config
+      - /var/run/docker.sock:/var/run/docker.sock
+    env_file: .env
+    restart: unless-stopped
+    networks:
+      - night-feed-net
+
+  collector:
+    build: ./services/collector
+    container_name: night-feed-collector
+    volumes:
+      - ./data:/data
+      - ./config:/config:ro
+    env_file: .env
+    networks:
+      - night-feed-net
+
+  writer:
+    build: ./services/writer
+    container_name: night-feed-writer
+    volumes:
+      - ./data:/data:ro
+      - ./output:/output
+      - ./config:/config:ro
+    env_file: .env
+    networks:
+      - night-feed-net
+
+  publisher:
+    build: ./services/publisher
+    container_name: night-feed-publisher
+    volumes:
+      - ./output:/output
+      - ./config:/config:ro
+    env_file: .env
+    networks:
+      - night-feed-net
+
+  nginx:
+    build: ./nginx
+    container_name: night-feed-nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - ./output:/usr/share/nginx/html:ro
+    restart: unless-stopped
+    networks:
+      - night-feed-net
+
+networks:
+  night-feed-net:
+    driver: bridge
