@@ -51,7 +51,7 @@ services:
     build: ./nginx
     container_name: night-feed-nginx
     ports:
-      - "8080:80"
+      - "8081:80"
     volumes:
       - ./output:/usr/share/nginx/html:ro
     restart: unless-stopped
