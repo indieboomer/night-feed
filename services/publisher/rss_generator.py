@@ -34,18 +34,27 @@ class RSSGenerator:
 
         return fg
 
-    def add_episode(self, fg, episode_date, episode_file):
+    def add_episode(self, fg, episode_timestamp, episode_file):
         """Add an episode to the feed."""
+        # Extract date from timestamp (YYYY-MM-DD_HHMMSS or YYYY-MM-DD)
+        episode_date = episode_timestamp.split('_')[0]
+
         # Get episode number from date (days since epoch % 10000)
         episode_num = (datetime.strptime(episode_date, "%Y-%m-%d") - datetime(2020, 1, 1)).days
 
+        # Add time suffix for display if timestamp includes time
+        display_title = f"Night-Feed #{episode_num} - {episode_date}"
+        if '_' in episode_timestamp:
+            time_part = episode_timestamp.split('_')[1]
+            display_title += f" ({time_part[:2]}:{time_part[2:4]})"
+
         fe = fg.add_entry()
-        fe.id(f"night-feed-{episode_date}")
-        fe.title(f"Night-Feed #{episode_num} - {episode_date}")
+        fe.id(f"night-feed-{episode_timestamp}")
+        fe.title(display_title)
         fe.description(f"Codzienny briefing o trendach w grach i technologii - {episode_date}")
 
-        # Episode URL
-        episode_url = f"{self.base_url}/episodes/{episode_date}.mp3"
+        # Episode URL (use full timestamp in filename)
+        episode_url = f"{self.base_url}/episodes/{episode_timestamp}.mp3"
 
         # Get file size and duration
         file_size = os.path.getsize(episode_file)
@@ -93,10 +102,11 @@ class RSSGenerator:
         if os.path.exists(episodes_dir):
             for filename in os.listdir(episodes_dir):
                 if filename.endswith('.mp3'):
-                    # Extract date from filename (YYYY-MM-DD.mp3)
-                    episode_date = filename.replace('.mp3', '')
+                    # Extract date from filename
+                    # Format: YYYY-MM-DD_HHMMSS.mp3 or YYYY-MM-DD.mp3 (backward compatible)
+                    episode_timestamp = filename.replace('.mp3', '')
                     episode_path = os.path.join(episodes_dir, filename)
-                    episode_files.append((episode_date, episode_path))
+                    episode_files.append((episode_timestamp, episode_path))
 
         # Sort by date (newest first)
         episode_files.sort(reverse=True)

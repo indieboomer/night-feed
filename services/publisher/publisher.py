@@ -38,8 +38,9 @@ def cleanup_old_episodes(episodes_dir, days_to_keep=30):
             continue
 
         try:
-            # Extract date from filename
-            episode_date_str = filename.replace('.mp3', '')
+            # Extract date from filename (YYYY-MM-DD_HHMMSS.mp3 or YYYY-MM-DD.mp3)
+            episode_timestamp = filename.replace('.mp3', '')
+            episode_date_str = episode_timestamp.split('_')[0]  # Get date part
             episode_date = datetime.strptime(episode_date_str, "%Y-%m-%d")
 
             if episode_date < cutoff_date:
@@ -62,6 +63,7 @@ def main():
     print("=" * 60)
 
     date_str = datetime.now().strftime("%Y-%m-%d")
+    timestamp_str = datetime.now().strftime("%Y-%m-%d_%H%M%S")
 
     # Create output directories
     episodes_dir = '/output/episodes'
@@ -76,7 +78,8 @@ def main():
     print("\n[2/4] Generating audio with ElevenLabs...")
     tts = TTSClient()
 
-    audio_path = os.path.join(episodes_dir, f'{date_str}.mp3')
+    # Use timestamp for unique filename (helps with testing)
+    audio_path = os.path.join(episodes_dir, f'{timestamp_str}.mp3')
 
     try:
         tts_metadata = tts.generate_audio(script, audio_path)
@@ -117,7 +120,7 @@ def main():
 
     print("\n" + "=" * 60)
     print("PUBLISHING COMPLETE")
-    print(f"Episode available at: {os.getenv('PODCAST_BASE_URL', 'http://localhost:8080')}/episodes/{date_str}.mp3")
+    print(f"Episode available at: {os.getenv('PODCAST_BASE_URL', 'http://localhost:8080')}/episodes/{timestamp_str}.mp3")
     print(f"RSS feed: {os.getenv('PODCAST_BASE_URL', 'http://localhost:8080')}/feed.xml")
     print("=" * 60)
 
